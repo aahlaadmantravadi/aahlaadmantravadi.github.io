@@ -487,7 +487,7 @@
             @keyframes fade-in-up { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
             .animate-fade-in-down { animation: fade-in-down 0.8s ease-out 0.2s forwards; }
             .animate-fade-in-up { animation: fade-in-up 0.8s ease-out 0.4s forwards; }
-            .tech-tag { @apply inline-flex items-center bg-indigo-500/10 text-indigo-300 text-xs font-semibold px-3 py-1 rounded-full border border-indigo-500/20; }
+            .tech-tag { @apply inline-flex items-center bg-indigo-500/10 text-indigo-300 text-xs font-semibold px-3 py-1 rounded-full border border-indigo-500/20 transition-all duration-300 hover:bg-indigo-500/20; }
             .skill-category { @apply bg-gray-500/5 p-6 rounded-lg border border-gray-500/10; }
             .skill-category h4 { @apply text-lg font-bold text-indigo-300 mb-4 border-b border-indigo-500/30 pb-2; }
             .skill-category ul { @apply space-y-3; }
