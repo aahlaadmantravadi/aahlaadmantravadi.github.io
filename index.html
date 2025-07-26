@@ -27,8 +27,18 @@
         }
 
         /* Custom Cursor */
-        .cursor { position: fixed; top: -50px; left: -50px; width: var(--cursor-size); height: var(--cursor-size); background-color: var(--primary-color); border-radius: 50%; z-index: 10000; pointer-events: none; mix-blend-mode: difference; transition: transform 0.2s ease-out, opacity 0.2s ease-out; }
-        .cursor.hovered { transform: scale(var(--cursor-scale)); }
+        .cursor { 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: var(--cursor-size); 
+            height: var(--cursor-size); 
+            background-color: var(--primary-color); 
+            border-radius: 50%; 
+            z-index: 10000; 
+            pointer-events: none; 
+            mix-blend-mode: difference;
+        }
         .cursor.hidden { opacity: 0; }
 
         #bg-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; }
@@ -213,7 +223,7 @@
                     <div class="spotlight-card rounded-lg p-6 flex flex-col reveal" style="transition-delay: 200ms">
                         <h3 class="text-xl font-bold text-white mb-2">Unified Messaging Gateway</h3>
                         <p class="text-gray-400 mb-4 text-sm flex-grow">A Node.js-based system featuring a TCP echo server, an HTTP server, and WebSocket communication for robust messaging.</p>
-                        <div class="flex flex-wrap gap-2 my-4"><span class="tech-tag">Node.js</span><span class="tech-tag">JavaScript</span><span class="tech-tag">TCP</span><span class="tech-tag">WebSockets</span></div>
+                        <div class="flex flex-wrap gap-2 my-4"><span class="tech-tag">Node.js</span><span class="tech-tag">JavaScript</span><span class="tech-tag">TCP</span></div>
                         <div class="mt-auto"><a href="#" class="link-style hoverable"><i data-lucide="github" class="w-4 h-4 mr-2"></i>Source Code</a></div>
                     </div>
                     <div class="spotlight-card rounded-lg p-6 flex flex-col reveal" style="transition-delay: 300ms">
@@ -313,6 +323,9 @@
         let mouseX = 0, mouseY = 0, cursorX = 0, cursorY = 0;
         const speed = 0.2;
         let activeSpotlightCard = null;
+        let isHovering = false;
+        let currentScale = 1;
+        const targetScale = 5;
 
         document.addEventListener('mousemove', e => {
             mouseX = e.clientX;
@@ -320,10 +333,19 @@
         });
 
         function unifiedAnimator() {
-            // Animate Cursor
+            // Animate Cursor Position
             cursorX += (mouseX - cursorX) * speed;
             cursorY += (mouseY - cursorY) * speed;
-            cursor.style.transform = `translate3d(${cursorX}px, ${cursorY}px, 0)`;
+            
+            // Animate Cursor Scale
+            const scaleSpeed = 0.2;
+            if (isHovering) {
+                currentScale += (targetScale - currentScale) * scaleSpeed;
+            } else {
+                currentScale += (1 - currentScale) * scaleSpeed;
+            }
+            
+            cursor.style.transform = `translate3d(${cursorX}px, ${cursorY}px, 0) scale(${currentScale})`;
 
             // Animate Spotlight
             if (activeSpotlightCard) {
@@ -339,8 +361,8 @@
         unifiedAnimator();
 
         hoverables.forEach(el => {
-            el.addEventListener('mouseenter', () => cursor.classList.add('hovered'));
-            el.addEventListener('mouseleave', () => cursor.classList.remove('hovered'));
+            el.addEventListener('mouseenter', () => isHovering = true);
+            el.addEventListener('mouseleave', () => isHovering = false);
         });
         document.addEventListener('mouseleave', () => cursor.classList.add('hidden'));
         document.addEventListener('mouseenter', () => cursor.classList.remove('hidden'));
@@ -395,6 +417,20 @@
 
         // --- THREE.JS ANIMATED BACKGROUND ---
         let scene, camera, renderer, stars;
+        function createStarTexture() {
+            const canvas = document.createElement('canvas');
+            canvas.width = 16;
+            canvas.height = 16;
+            const context = canvas.getContext('2d');
+            const gradient = context.createRadialGradient(8, 8, 0, 8, 8, 8);
+            gradient.addColorStop(0, 'rgba(255,255,255,1)');
+            gradient.addColorStop(0.2, 'rgba(255,255,255,0.8)');
+            gradient.addColorStop(1, 'rgba(255,255,255,0)');
+            context.fillStyle = gradient;
+            context.fillRect(0, 0, 16, 16);
+            return new THREE.CanvasTexture(canvas);
+        }
+
         function initThreeJS() {
             scene = new THREE.Scene();
             camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 1000);
@@ -408,11 +444,13 @@
             for (let i = 0; i < starCount * 3; i++) { positions[i] = (Math.random() - 0.5) * 800; }
             starGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
             
-            // --- STAR APPEARANCE FIX ---
             let starMaterial = new THREE.PointsMaterial({ 
-                color: 0xaaaaaa, 
-                size: 0.7, 
-                sizeAttenuation: true // Makes stars smaller with distance
+                color: 0xffffff, // Brighter color
+                size: 1.5, 
+                map: createStarTexture(),
+                transparent: true,
+                depthWrite: false,
+                blending: THREE.AdditiveBlending // Makes them glow
             });
 
             stars = new THREE.Points(starGeo, starMaterial);
@@ -423,7 +461,6 @@
                 renderer.setSize(window.innerWidth, window.innerHeight);
             }, false);
             
-            // Parallax effect for stars
             document.addEventListener('mousemove', (event) => {
                 if (stars) {
                     const mouseX = (event.clientX / window.innerWidth) * 2 - 1;
