@@ -19,7 +19,12 @@
 
         /* Hide scrollbar */
         body::-webkit-scrollbar { display: none; }
-        body { -ms-overflow-style: none; scrollbar-width: none; font-family: 'Inter', sans-serif; background-color: var(--bg-color); color: #d1d5db; cursor: none; }
+        body { -ms-overflow-style: none; scrollbar-width: none; font-family: 'Inter', sans-serif; background-color: var(--bg-color); color: #d1d5db; }
+        
+        /* --- CURSOR FIX: Hide default cursor on ALL elements --- */
+        * {
+            cursor: none;
+        }
 
         /* Custom Cursor */
         .cursor { position: fixed; top: -50px; left: -50px; width: var(--cursor-size); height: var(--cursor-size); background-color: var(--primary-color); border-radius: 50%; z-index: 10000; pointer-events: none; mix-blend-mode: difference; transition: transform 0.2s ease-out, opacity 0.2s ease-out; }
@@ -37,7 +42,7 @@
         .nav-link:hover::after { width: 100%; }
 
         /* Neon Highlighting for links */
-        .link-style { @apply relative inline-flex items-center text-sm text-gray-400 hover:text-white transition-all duration-300; cursor: none; }
+        .link-style { @apply relative inline-flex items-center text-sm text-gray-400 hover:text-white transition-all duration-300; }
         .link-style:hover { text-shadow: 0 0 10px var(--primary-glow), 0 0 20px var(--primary-glow); }
 
         /* Scroll-triggered Animations */
@@ -66,7 +71,7 @@
             transform: translate(-50%, -50%);
             opacity: 0;
             transition: opacity 0.3s;
-            pointer-events: none; /* Ensure the pseudo-element doesn't block mouse events */
+            pointer-events: none;
         }
         .spotlight-card:hover::before {
             opacity: 1;
@@ -196,25 +201,25 @@
                     <div class="spotlight-card rounded-lg p-6 flex flex-col reveal">
                         <h3 class="text-xl font-bold text-white mb-2">Custom Linux Debugger</h3>
                         <p class="text-gray-400 mb-4 text-sm flex-grow">A lightweight debugger in C++ using ptrace for process control, with ELF/DWARF parsers for source-level debugging.</p>
-                        <div class="flex flex-wrap gap-2 my-4"><span class="tech-tag"><i data-lucide="terminal" class="w-4 h-4 mr-2"></i>C++</span><span class="tech-tag"><i data-lucide="binary" class="w-4 h-4 mr-2"></i>Linux</span><span class="tech-tag"><i data-lucide="bug" class="w-4 h-4 mr-2"></i>ptrace</span></div>
+                        <div class="flex flex-wrap gap-2 my-4"><span class="tech-tag">C++</span><span class="tech-tag">Linux</span><span class="tech-tag">ptrace</span></div>
                         <div class="mt-auto"><a href="#" class="link-style hoverable"><i data-lucide="github" class="w-4 h-4 mr-2"></i>Source Code</a></div>
                     </div>
                     <div class="spotlight-card rounded-lg p-6 flex flex-col reveal" style="transition-delay: 100ms">
                         <h3 class="text-xl font-bold text-white mb-2">C++ Neural Networks</h3>
                         <p class="text-gray-400 mb-4 text-sm flex-grow">A neural network framework in C++ with GPU parallelization using CUDA, achieving 83.6% accuracy on CIFAR-10.</p>
-                        <div class="flex flex-wrap gap-2 my-4"><span class="tech-tag"><i data-lucide="brain-circuit" class="w-4 h-4 mr-2"></i>CUDA</span><span class="tech-tag"><i data-lucide="gpu-chip" class="w-4 h-4 mr-2"></i>GPU</span></div>
+                        <div class="flex flex-wrap gap-2 my-4"><span class="tech-tag">C++</span><span class="tech-tag">CUDA</span><span class="tech-tag">GPU</span></div>
                         <div class="mt-auto"><a href="#" class="link-style hoverable"><i data-lucide="github" class="w-4 h-4 mr-2"></i>Source Code</a></div>
                     </div>
                     <div class="spotlight-card rounded-lg p-6 flex flex-col reveal" style="transition-delay: 200ms">
                         <h3 class="text-xl font-bold text-white mb-2">Unified Messaging Gateway</h3>
                         <p class="text-gray-400 mb-4 text-sm flex-grow">A Node.js-based system featuring a TCP echo server, an HTTP server, and WebSocket communication for robust messaging.</p>
-                        <div class="flex flex-wrap gap-2 my-4"><span class="tech-tag"><i data-lucide="server" class="w-4 h-4 mr-2"></i>Node.js</span><span class="tech-tag"><i data-lucide="arrow-right-left" class="w-4 h-4 mr-2"></i>TCP</span><span class="tech-tag"><i data-lucide="message-square" class="w-4 h-4 mr-2"></i>WebSockets</span></div>
+                        <div class="flex flex-wrap gap-2 my-4"><span class="tech-tag">Node.js</span><span class="tech-tag">JavaScript</span><span class="tech-tag">TCP</span><span class="tech-tag">WebSockets</span></div>
                         <div class="mt-auto"><a href="#" class="link-style hoverable"><i data-lucide="github" class="w-4 h-4 mr-2"></i>Source Code</a></div>
                     </div>
                     <div class="spotlight-card rounded-lg p-6 flex flex-col reveal" style="transition-delay: 300ms">
                         <h3 class="text-xl font-bold text-white mb-2">Simple Blockchain Prototype</h3>
                         <p class="text-gray-400 mb-4 text-sm flex-grow">A functional blockchain in Python with a Proof-of-Work algorithm and a Flask-based REST API for node interaction.</p>
-                        <div class="flex flex-wrap gap-2 my-4"><span class="tech-tag"><i data-lucide="code" class="w-4 h-4 mr-2"></i>Python</span><span class="tech-tag"><i data-lucide="flask-conical" class="w-4 h-4 mr-2"></i>Flask</span><span class="tech-tag"><i data-lucide="link" class="w-4 h-4 mr-2"></i>REST API</span></div>
+                        <div class="flex flex-wrap gap-2 my-4"><span class="tech-tag">Python</span><span class="tech-tag">Flask</span><span class="tech-tag">REST API</span></div>
                         <div class="mt-auto"><a href="#" class="link-style hoverable"><i data-lucide="github" class="w-4 h-4 mr-2"></i>Source Code</a></div>
                     </div>
                 </div>
@@ -302,22 +307,40 @@
         // --- LUCIDE ICONS ---
         lucide.createIcons();
 
-        // --- SMOOTH CURSOR MOVEMENT ---
+        // --- UNIFIED ANIMATION FRAME ---
         const cursor = document.querySelector('.cursor');
         const hoverables = document.querySelectorAll('.hoverable');
         let mouseX = 0, mouseY = 0, cursorX = 0, cursorY = 0;
         const speed = 0.2;
-        function animateCursor() {
+        let activeSpotlightCard = null;
+
+        document.addEventListener('mousemove', e => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+
+        function unifiedAnimator() {
+            // Animate Cursor
             cursorX += (mouseX - cursorX) * speed;
             cursorY += (mouseY - cursorY) * speed;
             cursor.style.transform = `translate3d(${cursorX}px, ${cursorY}px, 0)`;
-            requestAnimationFrame(animateCursor);
+
+            // Animate Spotlight
+            if (activeSpotlightCard) {
+                const rect = activeSpotlightCard.getBoundingClientRect();
+                const x = cursorX - rect.left;
+                const y = cursorY - rect.top;
+                activeSpotlightCard.style.setProperty('--x', `${x}px`);
+                activeSpotlightCard.style.setProperty('--y', `${y}px`);
+            }
+
+            requestAnimationFrame(unifiedAnimator);
         }
-        document.addEventListener('mousemove', e => { mouseX = e.clientX; mouseY = e.clientY; });
-        animateCursor();
+        unifiedAnimator();
+
         hoverables.forEach(el => {
-            el.addEventListener('mouseover', () => cursor.classList.add('hovered'));
-            el.addEventListener('mouseout', () => cursor.classList.remove('hovered'));
+            el.addEventListener('mouseenter', () => cursor.classList.add('hovered'));
+            el.addEventListener('mouseleave', () => cursor.classList.remove('hovered'));
         });
         document.addEventListener('mouseleave', () => cursor.classList.add('hidden'));
         document.addEventListener('mouseenter', () => cursor.classList.remove('hidden'));
@@ -339,13 +362,8 @@
         // --- SPOTLIGHT EFFECT ---
         const spotlightCards = document.querySelectorAll('.spotlight-card');
         spotlightCards.forEach(card => {
-            card.addEventListener('mousemove', (e) => {
-                const rect = card.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const y = e.clientY - rect.top;
-                card.style.setProperty('--x', `${x}px`);
-                card.style.setProperty('--y', `${y}px`);
-            });
+            card.addEventListener('mouseenter', () => activeSpotlightCard = card);
+            card.addEventListener('mouseleave', () => activeSpotlightCard = null);
         });
 
         // --- MOBILE MENU ---
@@ -389,8 +407,14 @@
             const positions = new Float32Array(starCount * 3);
             for (let i = 0; i < starCount * 3; i++) { positions[i] = (Math.random() - 0.5) * 800; }
             starGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-            let sprite = new THREE.TextureLoader().load('https://placehold.co/16x16/ffffff/ffffff.png?text=+');
-            let starMaterial = new THREE.PointsMaterial({ color: 0xaaaaaa, size: 0.7, map: sprite, transparent: true });
+            
+            // --- STAR APPEARANCE FIX ---
+            let starMaterial = new THREE.PointsMaterial({ 
+                color: 0xaaaaaa, 
+                size: 0.7, 
+                sizeAttenuation: true // Makes stars smaller with distance
+            });
+
             stars = new THREE.Points(starGeo, starMaterial);
             scene.add(stars);
             window.addEventListener("resize", () => {
