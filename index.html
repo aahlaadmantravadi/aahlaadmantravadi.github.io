@@ -37,7 +37,7 @@
         .nav-link:hover::after { width: 100%; }
 
         /* Neon Highlighting for links */
-        .link-style { @apply relative inline-flex items-center text-sm text-gray-400 hover:text-white transition-all duration-300; }
+        .link-style { @apply relative inline-flex items-center text-sm text-gray-400 hover:text-white transition-all duration-300; cursor: none; }
         .link-style:hover { text-shadow: 0 0 10px var(--primary-glow), 0 0 20px var(--primary-glow); }
 
         /* Scroll-triggered Animations */
@@ -66,6 +66,7 @@
             transform: translate(-50%, -50%);
             opacity: 0;
             transition: opacity 0.3s;
+            pointer-events: none; /* Ensure the pseudo-element doesn't block mouse events */
         }
         .spotlight-card:hover::before {
             opacity: 1;
@@ -192,17 +193,29 @@
             <div class="container mx-auto px-6 reveal">
                 <h2 class="section-title">Featured Projects</h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <div class="spotlight-card rounded-lg p-6 flex flex-col hoverable reveal">
+                    <div class="spotlight-card rounded-lg p-6 flex flex-col reveal">
                         <h3 class="text-xl font-bold text-white mb-2">Custom Linux Debugger</h3>
                         <p class="text-gray-400 mb-4 text-sm flex-grow">A lightweight debugger in C++ using ptrace for process control, with ELF/DWARF parsers for source-level debugging.</p>
                         <div class="flex flex-wrap gap-2 my-4"><span class="tech-tag"><i data-lucide="terminal" class="w-4 h-4 mr-2"></i>C++</span><span class="tech-tag"><i data-lucide="binary" class="w-4 h-4 mr-2"></i>Linux</span><span class="tech-tag"><i data-lucide="bug" class="w-4 h-4 mr-2"></i>ptrace</span></div>
-                        <div class="mt-auto"><a href="#" class="link-style"><i data-lucide="github" class="w-4 h-4 mr-2"></i>Source Code</a></div>
+                        <div class="mt-auto"><a href="#" class="link-style hoverable"><i data-lucide="github" class="w-4 h-4 mr-2"></i>Source Code</a></div>
                     </div>
-                    <div class="spotlight-card rounded-lg p-6 flex flex-col hoverable reveal" style="transition-delay: 100ms">
+                    <div class="spotlight-card rounded-lg p-6 flex flex-col reveal" style="transition-delay: 100ms">
                         <h3 class="text-xl font-bold text-white mb-2">C++ Neural Networks</h3>
                         <p class="text-gray-400 mb-4 text-sm flex-grow">A neural network framework in C++ with GPU parallelization using CUDA, achieving 83.6% accuracy on CIFAR-10.</p>
                         <div class="flex flex-wrap gap-2 my-4"><span class="tech-tag"><i data-lucide="brain-circuit" class="w-4 h-4 mr-2"></i>CUDA</span><span class="tech-tag"><i data-lucide="gpu-chip" class="w-4 h-4 mr-2"></i>GPU</span></div>
-                        <div class="mt-auto"><a href="#" class="link-style"><i data-lucide="github" class="w-4 h-4 mr-2"></i>Source Code</a></div>
+                        <div class="mt-auto"><a href="#" class="link-style hoverable"><i data-lucide="github" class="w-4 h-4 mr-2"></i>Source Code</a></div>
+                    </div>
+                    <div class="spotlight-card rounded-lg p-6 flex flex-col reveal" style="transition-delay: 200ms">
+                        <h3 class="text-xl font-bold text-white mb-2">Unified Messaging Gateway</h3>
+                        <p class="text-gray-400 mb-4 text-sm flex-grow">A Node.js-based system featuring a TCP echo server, an HTTP server, and WebSocket communication for robust messaging.</p>
+                        <div class="flex flex-wrap gap-2 my-4"><span class="tech-tag"><i data-lucide="server" class="w-4 h-4 mr-2"></i>Node.js</span><span class="tech-tag"><i data-lucide="arrow-right-left" class="w-4 h-4 mr-2"></i>TCP</span><span class="tech-tag"><i data-lucide="message-square" class="w-4 h-4 mr-2"></i>WebSockets</span></div>
+                        <div class="mt-auto"><a href="#" class="link-style hoverable"><i data-lucide="github" class="w-4 h-4 mr-2"></i>Source Code</a></div>
+                    </div>
+                    <div class="spotlight-card rounded-lg p-6 flex flex-col reveal" style="transition-delay: 300ms">
+                        <h3 class="text-xl font-bold text-white mb-2">Simple Blockchain Prototype</h3>
+                        <p class="text-gray-400 mb-4 text-sm flex-grow">A functional blockchain in Python with a Proof-of-Work algorithm and a Flask-based REST API for node interaction.</p>
+                        <div class="flex flex-wrap gap-2 my-4"><span class="tech-tag"><i data-lucide="code" class="w-4 h-4 mr-2"></i>Python</span><span class="tech-tag"><i data-lucide="flask-conical" class="w-4 h-4 mr-2"></i>Flask</span><span class="tech-tag"><i data-lucide="link" class="w-4 h-4 mr-2"></i>REST API</span></div>
+                        <div class="mt-auto"><a href="#" class="link-style hoverable"><i data-lucide="github" class="w-4 h-4 mr-2"></i>Source Code</a></div>
                     </div>
                 </div>
             </div>
@@ -388,17 +401,21 @@
             
             // Parallax effect for stars
             document.addEventListener('mousemove', (event) => {
-                const mouseX = (event.clientX / window.innerWidth) * 2 - 1;
-                const mouseY = -(event.clientY / window.innerHeight) * 2 + 1;
-                stars.rotation.x = mouseY * 0.05;
-                stars.rotation.y = mouseX * 0.05;
+                if (stars) {
+                    const mouseX = (event.clientX / window.innerWidth) * 2 - 1;
+                    const mouseY = -(event.clientY / window.innerHeight) * 2 + 1;
+                    stars.rotation.x = mouseY * 0.05;
+                    stars.rotation.y = mouseX * 0.05;
+                }
             });
 
             animateThree();
         }
         function animateThree() {
             requestAnimationFrame(animateThree);
-            renderer.render(scene, camera);
+            if (renderer && scene && camera) {
+                renderer.render(scene, camera);
+            }
         }
         initThreeJS();
 
