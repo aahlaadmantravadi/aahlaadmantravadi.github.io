@@ -1,167 +1,246 @@
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Aahlaad Mantravadi — Software Developer & AI Engineer</title>
-    <meta name="description" content="Portfolio of Aahlaad Mantravadi — software engineer focused on systems, C/C++, and machine learning." />
-    <meta property="og:title" content="Aahlaad Mantravadi — Software Developer & AI Engineer" />
-    <meta property="og:description" content="Crafting Robust Software & Intelligent Systems" />
-    <meta property="og:type" content="website" />
-    <meta name="twitter:card" content="summary_large_image" />
-
-    <!-- NOTE: replace with your production, purged Tailwind build -->
-    <link rel="stylesheet" href="./dist/output.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aahlaad Mantravadi - AI & Systems Architect</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
-
-    <!-- Load non-critical libs deferred. three.js used for decorative background only. -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" defer></script>
-    <script src="https://unpkg.com/lucide@latest" defer></script>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-        :root{
-            --cursor-size:8px;
-            --bg-color:#0A0A18;
-            --primary-color:#6366f1;
-            --primary-glow: rgba(99,102,241,0.45);
-            --muted:#9CA3AF;
+        :root {
+            --cursor-size: 8px;
+            --cursor-scale: 5;
+            --bg-color: #0A0A18;
+            --primary-color: #6366f1; /* Indigo 500 */
+            --primary-glow: rgba(99, 102, 241, 0.5);
         }
 
-        /* Basic page defaults */
-        html,body{height:100%;}
-        body{font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial; background:var(--bg-color); color:#d1d5db; -webkit-font-smoothing:antialiased;}
-
-        /* Skip link for keyboard users */
-        .skip-link{position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden}
-        .skip-link:focus{left:1rem;top:1rem;width:auto;height:auto;padding:.5rem .75rem;background:#111827;color:#fff;border-radius:.25rem;z-index:9999}
-
-        /* Custom cursor - enabled only when JS adds .custom-cursor to body */
-        .custom-cursor * { cursor: none !important; }
-        .cursor{
-            position:fixed;top:0;left:0;width:var(--cursor-size);height:var(--cursor-size);background:var(--primary-color);border-radius:50%;z-index:10000;pointer-events:none;mix-blend-mode:difference;transform:translate3d(-50%,-50%,0) scale(1);
-            transition:opacity .18s linear;
-        }
-        .cursor.hidden{opacity:0}
-
-        /* Background canvas sits behind content */
-        #bg-canvas{position:fixed;inset:0;width:100%;height:100%;z-index:-1}
-
-        /* Section title gradient text */
-        .section-title{font-weight:700;margin-bottom:4rem;text-align:center;font-size:2.25rem}
-        .section-title.gradient{background:linear-gradient(90deg,#c7d2fe,#a5b4fc);-webkit-background-clip:text;background-clip:text;color:transparent}
-
-        /* Navbar glass effect */
-        .glass-nav{background:rgba(10,10,24,0.5);backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,0.05)}
-        nav a{color:#9CA3AF;text-decoration:none}
-        .nav-link{display:inline-block;padding:.375rem .75rem;border-radius:.375rem;font-size:.9rem;position:relative}
-        .nav-link:focus{outline:3px solid rgba(99,102,241,0.25);outline-offset:2px}
-        .nav-link::after{content:'';position:absolute;left:50%;bottom:-6px;width:0;height:2px;background:var(--primary-color);transition:all .25s ease;transform:translateX(-50%)}
-        .nav-link:hover::after,.nav-link:focus::after{width:100%}
-
-        /* Buttons */
-        .btn{font-weight:700;padding:.75rem 1.25rem;border-radius:.75rem;transition:transform .15s ease,background .15s ease;display:inline-block}
-        .btn:focus{outline:3px solid rgba(99,102,241,0.25);outline-offset:2px}
-        .btn-primary{background:#4f46e5;color:#fff;box-shadow:0 10px 30px rgba(79,70,229,0.12)}
-        .btn-secondary{background:transparent;border:2px solid rgba(99,102,241,0.35);color:rgba(165,180,252,0.9)}
-
-        /* Spotlight cards */
-        .spotlight-card{position:relative;overflow:hidden;background:linear-gradient(145deg,rgba(255,255,255,0.03),rgba(255,255,255,0.01));border:1px solid rgba(255,255,255,0.06);border-radius:.6rem}
-        .spotlight-card::before{content:'';position:absolute;width:220px;height:220px;border-radius:50%;background:radial-gradient(circle,var(--primary-glow) 0%,transparent 70%);left:var(--x,50%);top:var(--y,50%);transform:translate(-50%,-50%);opacity:0;transition:opacity .25s linear;pointer-events:none}
-        .spotlight-card:hover::before{opacity:1}
-
-        /* Reveal animations */
-        .reveal{opacity:0;transform:translateY(36px);transition:opacity .72s cubic-bezier(.22,.9,.35,1),transform .72s cubic-bezier(.22,.9,.35,1)}
-        .reveal.visible{opacity:1;transform:none}
-
-        /* Skill & timeline styles */
-        .timeline-dot{position:absolute;left:1rem;top:.25rem;width:1.5rem;height:1.5rem;border-radius:9999px;background:#6366f1;border:4px solid var(--bg-color)}
-        .timeline-card{background:rgba(17,24,39,0.5);padding:1rem;border-radius:.5rem;border:1px solid rgba(0,0,0,0.2)}
-
-        /* Focus visual for interactive cards */
-        .spotlight-card:focus{outline:3px solid rgba(99,102,241,0.18);outline-offset:4px}
-
-        /* Language bars */
-        .lang-bar .fill{height:10px;border-radius:9999px;background:#6366f1;width:0;transition:width 1s ease-out .3s}
-
-        /* Small screens: keep accessible sizes */
-        @media (max-width:767px){
-            .section-title{font-size:1.75rem;margin-bottom:2.25rem}
+        /* Hide scrollbar */
+        body::-webkit-scrollbar { display: none; }
+        body { -ms-overflow-style: none; scrollbar-width: none; font-family: 'Inter', sans-serif; background-color: var(--bg-color); color: #d1d5db; }
+        
+        * {
+            cursor: none;
         }
 
-        /* Respect users who prefer reduced motion: disable animations */
-        @media (prefers-reduced-motion:reduce){
-            .reveal, .animate-fade-in-up, .animate-fade-in-down, .cursor{transition:none !important;animation:none !important}
+        .cursor { 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: var(--cursor-size); 
+            height: var(--cursor-size); 
+            background-color: var(--primary-color); 
+            border-radius: 50%; 
+            z-index: 10000; 
+            pointer-events: none; 
+            mix-blend-mode: difference;
+        }
+        .cursor.hidden { opacity: 0; }
+
+        #bg-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; }
+
+        .section-heading {
+            position: relative;
+            margin-bottom: 4rem;
+        }
+        .section-number {
+            position: absolute;
+            top: -2rem;
+            left: 0;
+            font-size: 6rem;
+            line-height: 1;
+            font-weight: 900;
+            color: rgba(99, 102, 241, 0.1);
+            transition: transform 0.7s ease-out, opacity 0.7s ease-out;
+            transform: scale(0.8);
+            opacity: 0;
+            z-index: 1;
+        }
+        .section-title {
+            position: relative;
+            font-size: 2.25rem;
+            font-weight: 700;
+            color: #f3f4f6;
+            padding-left: 1rem;
+            transition: transform 0.7s ease-out, opacity 0.7s ease-out;
+            transform: translateX(-20px);
+            opacity: 0;
+            z-index: 2;
+        }
+        
+        .reveal { opacity: 0; transform: translateY(50px); transition: opacity 0.8s ease-out, transform 0.8s ease-out; }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+
+        .reveal.visible .section-number {
+            transform: scale(1);
+            opacity: 1;
+        }
+        .reveal.visible .section-title {
+            transform: translateX(0);
+            opacity: 1;
+            transition-delay: 200ms;
+        }
+        
+        @media (min-width: 768px) {
+            .section-number { font-size: 8rem; }
+            .section-title { font-size: 3rem; }
+        }
+
+        .glass-nav { background: rgba(10, 10, 24, 0.5); backdrop-filter: blur(16px); border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
+        .nav-link { position: relative; padding: 0.5rem 0.75rem; border-radius: 0.375rem; font-size: 0.875rem; font-weight: 500; color: #9ca3af; transition: color 0.3s; }
+        .nav-link:hover { color: #fff; }
+        .nav-link::after { content: ''; position: absolute; left: 50%; bottom: -2px; width: 0; height: 2px; background: var(--primary-color); transition: all 0.3s ease; transform: translateX(-50%); }
+        .nav-link:hover::after { width: 100%; }
+
+        .link-style { position: relative; display: inline-flex; align-items: center; font-size: 0.875rem; color: #9ca3af; transition: all 0.3s; }
+        .link-style:hover { color: #fff; text-shadow: 0 0 10px var(--primary-glow), 0 0 20px var(--primary-glow); }
+
+        .btn { font-weight: 700; padding: 0.75rem 1.5rem; border-radius: 0.5rem; transition: all 0.3s; transform: scale(1); }
+        .btn:hover { transform: scale(1.05); }
+        .btn-primary { background-color: #4f46e5; color: #fff; box-shadow: 0 4px 6px -1px rgba(79, 70, 229, 0.2), 0 2px 4px -1px rgba(79, 70, 229, 0.2); }
+        .btn-primary:hover { background-color: #6366f1; }
+        .btn-secondary { background-color: transparent; border: 2px solid #6366f1; color: #a5b4fc; }
+        .btn-secondary:hover { background-color: #6366f1; color: #fff; }
+
+        .spotlight-card {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.01));
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .spotlight-card::before {
+            content: '';
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, var(--primary-glow) 0%, transparent 70%);
+            left: var(--x, 50%);
+            top: var(--y, 50%);
+            transform: translate(-50%, -50%);
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+        }
+        .spotlight-card:hover::before {
+            opacity: 1;
+        }
+
+        #contact-invitation {
+            min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; background-color: rgba(0,0,0,0.5); padding: 5rem 0; overflow: hidden;
+        }
+        .contact-title {
+            font-size: clamp(2.5rem, 12vw, 8rem);
+            font-weight: 900; line-height: 1; letter-spacing: -0.05em;
+        }
+        .contact-title-stroke {
+            -webkit-text-stroke: 2px var(--primary-color);
+            color: transparent;
+            transition: color 0.5s ease;
+        }
+        .contact-title-stroke:hover {
+            color: var(--primary-color);
+        }
+        
+        .loader { width: 2rem; height: 2rem; border-width: 4px; border-color: #a5b4fc; border-top-color: transparent; border-radius: 9999px; animation: spin 1s linear infinite; }
+        
+        .idea-input { width: 100%; max-width: 32rem; background-color: rgba(17, 24, 39, 0.5); border: 2px solid rgba(99, 102, 241, 0.3); border-radius: 9999px; padding: 0.75rem 1.5rem; color: #fff; transition: all 0.3s; }
+        .idea-input::placeholder { color: #6b7280; }
+        .idea-input:focus { outline: none; box-shadow: 0 0 0 2px #6366f1; }
+        
+        #idea-output { margin-top: 2rem; text-align: left; max-width: 42rem; margin-left: auto; margin-right: auto; background-color: rgba(17, 24, 39, 0.5); padding: 1.5rem; border-radius: 0.5rem; border: 1px solid rgba(99, 102, 241, 0.2); transition: all 0.5s; }
+        #idea-output.hidden { opacity: 0; transform: translateY(-1rem); }
+        #idea-output .idea-title { font-size: 1.5rem; font-weight: 700; color: #a5b4fc; margin-bottom: 0.75rem; }
+        #idea-output .idea-tagline { font-size: 1.125rem; color: #e5e7eb; margin-bottom: 1rem; }
+        #idea-output strong { color: #a5b4fc; }
+
+        @keyframes fade-in-down { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fade-in-up { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .animate-fade-in-down { animation: fade-in-down 0.8s ease-out 0.2s forwards; opacity: 0; }
+        .animate-fade-in-up { animation: fade-in-up 0.8s ease-out 0.4s forwards; opacity: 0; }
+
+        .lang-bar .bg-indigo-500 { transition: width 1s ease-out; }
+        .timeline-dot { position: absolute; top: 0.25rem; left: 1rem; width: 1.5rem; height: 1.5rem; background-color: #6366f1; border-radius: 9999px; transform: translateX(-50%); border: 4px solid var(--bg-color); }
+        @media (min-width: 768px) {
+            .timeline-dot { left: 50%; }
         }
     </style>
 </head>
-<body>
-    <a href="#main" class="skip-link">Skip to content</a>
-    <div class="cursor" aria-hidden="true"></div>
-    <canvas id="bg-canvas" aria-hidden="true"></canvas>
+<body class="antialiased">
+
+    <div class="cursor"></div>
+    <canvas id="bg-canvas"></canvas>
 
     <!-- Header & Navigation -->
-    <header id="header" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300" role="banner">
-        <nav class="container mx-auto px-6 py-4 flex justify-between items-center" role="navigation" aria-label="Primary Navigation">
-            <a href="#home" class="text-2xl font-bold text-white" aria-label="Home">AM.</a>
-
-            <ul class="hidden md:flex items-center space-x-6" role="menubar" aria-label="Primary Links">
-                <li role="none"><a href="#about" class="nav-link" role="menuitem">About</a></li>
-                <li role="none"><a href="#experience" class="nav-link" role="menuitem">Experience</a></li>
-                <li role="none"><a href="#projects" class="nav-link" role="menuitem">Projects</a></li>
-                <li role="none"><a href="#skills" class="nav-link" role="menuitem">Skills</a></li>
-                <li role="none"><a href="#contact" class="nav-link" role="menuitem">Contact</a></li>
-            </ul>
-
-            <div class="flex items-center gap-4">
-                <a href="./Resume_Aahlaad_Mantravadi.pdf" download rel="noopener noreferrer" class="hidden md:inline-block btn btn-secondary">Download CV</a>
-                <button id="mobile-menu-button" class="md:hidden text-white" aria-controls="mobile-menu" aria-expanded="false" aria-label="Open menu">
-                    <i data-lucide="menu"></i>
-                </button>
+    <header id="header" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="#" class="text-2xl font-bold text-white hoverable">AM.</a>
+            <div class="hidden md:flex items-center space-x-6">
+                <a href="#about" class="nav-link hoverable">About</a>
+                <a href="#experience" class="nav-link hoverable">Experience</a>
+                <a href="#projects" class="nav-link hoverable">Projects</a>
+                <a href="#skills" class="nav-link hoverable">Skills</a>
+                <a href="#contact" class="nav-link hoverable">Contact</a>
             </div>
+            <a href="./Resume_Aahlaad_DL.pdf" download class="hidden md:block btn btn-secondary hoverable">Download CV</a>
+            <button id="mobile-menu-button" class="md:hidden text-white focus:outline-none hoverable">
+                <i data-lucide="menu"></i>
+            </button>
         </nav>
-
-        <div id="mobile-menu" class="hidden md:hidden bg-gray-900/80 backdrop-blur-sm p-4" role="menu" aria-hidden="true">
-            <a href="#about" role="menuitem" class="block py-3 px-4">About</a>
-            <a href="#experience" role="menuitem" class="block py-3 px-4">Experience</a>
-            <a href="#projects" role="menuitem" class="block py-3 px-4">Projects</a>
-            <a href="#skills" role="menuitem" class="block py-3 px-4">Skills</a>
-            <a href="#contact" role="menuitem" class="block py-3 px-4">Contact</a>
-            <a href="./Resume_Aahlaad_Mantravadi.pdf" download role="menuitem" class="block py-3 px-4">Download CV</a>
+        <div id="mobile-menu" class="hidden md:hidden bg-gray-900/80 backdrop-blur-sm">
+            <a href="#about" class="block py-3 px-4 text-sm hover:bg-gray-800 hoverable">About</a>
+            <a href="#experience" class="block py-3 px-4 text-sm hover:bg-gray-800 hoverable">Experience</a>
+            <a href="#projects" class="block py-3 px-4 text-sm hover:bg-gray-800 hoverable">Projects</a>
+            <a href="#skills" class="block py-3 px-4 text-sm hover:bg-gray-800 hoverable">Skills</a>
+            <a href="#contact" class="block py-3 px-4 text-sm hover:bg-gray-800 hoverable">Contact</a>
+            <a href="./Resume_Aahlaad_DL.pdf" download class="block py-3 px-4 text-sm hover:bg-gray-800 hoverable">Download CV</a>
         </div>
     </header>
 
-    <main id="main" class="mt-20">
+    <main>
         <!-- Hero Section -->
-        <section id="home" class="h-screen flex items-center justify-center text-center relative overflow-hidden" aria-labelledby="hero-heading">
+        <section id="home" class="h-screen flex items-center justify-center text-center relative overflow-hidden">
             <div class="z-10 px-4">
-                <h1 id="hero-heading" class="text-5xl md:text-7xl lg:text-8xl font-black text-white mb-4 animate-fade-in-down">Aahlaad Mantravadi</h1>
-                <p class="text-xl md:text-2xl text-indigo-300 font-medium mb-12 animate-fade-in-up">Crafting Robust Software & Intelligent Systems</p>
+                <h1 class="text-5xl md:text-7xl lg:text-8xl font-black text-white mb-4 animate-fade-in-down">
+                    Aahlaad Mantravadi
+                </h1>
+                <p class="text-xl md:text-2xl text-indigo-300 font-medium mb-12 animate-fade-in-up">
+                    High-performance C++ systems · Applied AI · Quantitative problem solving
+                </p>
+
                 <div class="flex justify-center space-x-4 animate-fade-in-up">
-                    <a href="#projects" class="btn btn-primary magnetic-button">View My Work</a>
-                    <a href="#contact" class="btn btn-secondary magnetic-button">Get In Touch</a>
+                    <a href="#projects" class="btn btn-primary magnetic-button hoverable">Explore My Work</a>
+                    <a href="#contact" class="btn btn-secondary magnetic-button hoverable">Get In Touch</a>
                 </div>
             </div>
             <div class="absolute bottom-10 left-1/2 -translate-x-1/2 text-white">
-                <a href="#about" aria-label="Scroll to About section">
-                    <i data-lucide="arrow-down" class="w-6 h-6 animate-bounce" aria-hidden="true"></i>
+                <a href="#about" class="hoverable">
+                    <i data-lucide="arrow-down" class="w-6 h-6 animate-bounce"></i>
                 </a>
             </div>
         </section>
 
         <!-- About Section -->
         <section id="about" class="py-20 md:py-32">
-            <div class="container mx-auto px-6 reveal">
-                <h2 class="section-title gradient">About Me</h2>
+            <div class="container mx-auto px-6">
+                <div class="section-heading reveal">
+                    <span class="section-number">01</span>
+                    <h2 class="section-title">About Me</h2>
+                </div>
                 <div class="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-5 gap-12 items-center">
                     <div class="md:col-span-2 flex justify-center">
                         <div class="w-56 h-56 rounded-full bg-gray-800 border-4 border-indigo-500 overflow-hidden shadow-2xl shadow-indigo-500/20">
-                            <img src="./profile.jpg" alt="Portrait — Aahlaad Mantravadi" onerror="this.onerror=null;this.src='https://placehold.co/224x224/0A0A18/d1d5db?text=AM';" class="w-full h-full object-cover">
+                             <img src="./profile.jpg" onerror="this.onerror=null;this.src='https://placehold.co/224x224/0A0A18/d1d5db?text=AM';" alt="Aahlaad Mantravadi" class="w-full h-full object-cover">
                         </div>
                     </div>
                     <div class="md:col-span-3 text-lg text-center md:text-left text-gray-300">
-                        <p class="mb-6">A passionate Computer Science student at IIIT Naya Raipur with a strong foundation in software engineering, deep learning, and systems programming. My experience spans from developing GUIs for avionics systems at DRDO to building AI-driven action recognition models.</p>
-                        <p class="mb-6">I thrive on solving complex problems, whether it's creating a custom debugger from scratch, implementing a blockchain prototype, or parallelizing neural networks with CUDA. I'm always eager to learn and apply new technologies to build efficient and impactful solutions.</p>
-                        <p class="text-indigo-300"><strong>Fun Fact:</strong> I'm also a classic Carnatic vocalist with over 10 years of training!</p>
+                        <p class="mb-6">
+                            I build performant, reliable systems where low-level control and algorithmic clarity matter. My focus is on high-performance C++ engineering, GPU-accelerated AI, and quantitative reasoning — turning algorithms, statistics, and data structures into production-grade solutions.
+                        </p>
+                        <p class="mb-6">
+                            I prefer depth over breadth: I read research, implement core methods from first principles, and optimise critical code paths. I work best autonomously, favour building from scratch when correctness and performance demand it, and I welcome rigorous feedback to harden designs. I also communicate technical tradeoffs clearly to non-technical stakeholders when required.
+                        </p>
                     </div>
                 </div>
             </div>
@@ -169,73 +248,128 @@
 
         <!-- Experience Section -->
         <section id="experience" class="py-20 md:py-32 bg-black/20">
-            <div class="container mx-auto px-6 reveal">
-                <h2 class="section-title gradient">Career Journey</h2>
+            <div class="container mx-auto px-6">
+                <div class="section-heading reveal">
+                    <span class="section-number">02</span>
+                    <h2 class="section-title">Career Journey</h2>
+                </div>
                 <div class="relative max-w-4xl mx-auto">
-                    <div class="absolute left-4 md:left-1/2 w-1 h-full bg-indigo-500/20 rounded-full -translate-x-1/2" aria-hidden="true"></div>
-
-                    <article class="relative mb-16 reveal" aria-labelledby="exp-rc1">
+                    <div class="absolute left-4 md:left-1/2 w-1 h-full bg-indigo-500/20 rounded-full -translate-x-1/2"></div>
+                    
+                    <div class="relative mb-16">
                         <div class="md:grid md:grid-cols-2 md:gap-8">
                             <div class="md:text-right">
-                                <h3 id="exp-rc1" class="text-xl font-bold text-white">Software Developer Intern</h3>
+                                <h3 class="text-xl font-bold text-white">Software Developer Intern</h3>
                                 <p class="text-indigo-400">RCI, DRDO</p>
-                                <p class="text-sm text-gray-400 mb-4 md:mb-0">Feb 2025 — July 2025</p>
+                                <p class="text-sm text-gray-400 mb-4 md:mb-0">Feb 2025 - July 2025</p>
                             </div>
                             <div class="pl-12 md:pl-0">
-                                <div class="timeline-dot" aria-hidden="true"></div>
-                                <p class="timeline-card">Led GUI development for avionics system simulation using C, Windows API, and OpenGL. Boosted responsiveness by 60% with a multithreaded architecture.</p>
+                                <div class="timeline-dot"></div>
+                                <p class="bg-gray-800/50 p-4 rounded-lg border border-gray-700">Engineered a multithreaded GUI in C for avionics simulation, achieving a 60% throughput increase for mission-critical data visualization and hardware interfacing.</p>
                             </div>
                         </div>
-                    </article>
+                    </div>
 
-                    <article class="relative mb-16 reveal" aria-labelledby="exp-rc2">
-                        <div class="md:grid md:grid-cols-2 md:gap-8">
+                    <div class="relative mb-16">
+                         <div class="md:grid md:grid-cols-2 md:gap-8">
                             <div class="md:text-right md:order-2">
-                                <h3 id="exp-rc2" class="text-xl font-bold text-white">Developer Intern</h3>
-                                <p class="text-indigo-400">RCTS, IIT-Hyderabad</p>
-                                <p class="text-sm text-gray-400 mb-4 md:mb-0">May 2024 — July 2024</p>
+                                <h3 class="text-xl font-bold text-white">Developer Intern</h3>
+                                <p class="text-indigo-400">RCTS, IIIT-Hyderabad</p>
+                                <p class="text-sm text-gray-400 mb-4 md:mb-0">May 2024 - July 2024</p>
                             </div>
                             <div class="pl-12 md:pl-0 md:text-right md:order-1">
-                                <div class="timeline-dot" aria-hidden="true"></div>
-                                <p class="timeline-card">Developed an Action Recognition model using Masked Video Distillation. Contributed to a custom dataset for fine-tuning real-time behavior tracking.</p>
+                                <div class="timeline-dot"></div>
+                                <p class="bg-gray-800/50 p-4 rounded-lg border border-gray-700">Developed a novel action recognition model using Masked Video Distillation to overcome real-world data challenges like low resolution and obfuscation.</p>
                             </div>
                         </div>
-                    </article>
+                    </div>
                 </div>
             </div>
         </section>
 
         <!-- Projects Section -->
         <section id="projects" class="py-20 md:py-32">
-            <div class="container mx-auto px-6 reveal">
-                <h2 class="section-title gradient">Featured Projects</h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <div class="spotlight-card p-6 flex flex-col reveal" tabindex="0">
-                        <h3 class="text-xl font-bold text-white mb-2">Custom Linux Debugger</h3>
-                        <p class="text-gray-400 mb-4 text-sm flex-grow">A lightweight debugger in C++ using ptrace for process control, with ELF/DWARF parsers for source-level debugging.</p>
-                        <div class="flex flex-wrap gap-2 my-4"><span class="tech-tag">C++</span><span class="tech-tag">Linux</span><span class="tech-tag">ptrace</span></div>
-                        <div class="mt-auto"><a href="https://github.com/aahlaadmantravadi/mini-debugger" class="link-style" rel="noopener noreferrer" target="_blank"><i data-lucide="github" class="w-4 h-4 mr-2" aria-hidden="true"></i>Source Code</a></div>
+            <div class="container mx-auto px-6">
+                 <div class="section-heading reveal">
+                    <span class="section-number">03</span>
+                    <h2 class="section-title">Featured Projects</h2>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div class="spotlight-card rounded-lg p-6 flex flex-col">
+                        <h3 class="text-xl font-bold text-white mb-2">RedisCraft</h3>
+                        <p class="text-gray-400 mb-4 text-sm flex-grow">An in-memory database server in C++ from scratch, featuring an event-driven architecture with `epoll` for non-blocking I/O, custom AVL trees, and concurrent data structures.</p>
+                        <div class="flex flex-wrap gap-2 my-4">
+                            <span class="inline-flex items-center bg-indigo-500/10 text-indigo-300 text-xs font-semibold px-3 py-1 rounded-full border border-indigo-500/20 transition-all duration-300 hover:bg-indigo-500/20">C++</span>
+                            <span class="inline-flex items-center bg-indigo-500/10 text-indigo-300 text-xs font-semibold px-3 py-1 rounded-full border border-indigo-500/20 transition-all duration-300 hover:bg-indigo-500/20">Linux</span>
+                            <span class="inline-flex items-center bg-indigo-500/10 text-indigo-300 text-xs font-semibold px-3 py-1 rounded-full border border-indigo-500/20 transition-all duration-300 hover:bg-indigo-500/20">Networking</span>
+                        </div>
+                        <div class="flex justify-between items-center mt-4">
+                            <a href="https://github.com/aahlaadmantravadi/RedisCraft" target="_blank" class="link-style hoverable"><i data-lucide="github" class="w-4 h-4 mr-2"></i>Source Code</a>
+                            <button class="mt-auto text-sm bg-indigo-500/10 text-indigo-300 font-semibold px-4 py-2 rounded-full border border-indigo-500/20 transition-all duration-300 hover:bg-indigo-500/20 hover:text-white flex items-center justify-center gap-2 hoverable elaborate-btn">✨ Elaborate with AI</button>
+                        </div>
                     </div>
-
-                    <div class="spotlight-card p-6 flex flex-col reveal" tabindex="0" style="transition-delay:100ms">
+                    <div class="spotlight-card rounded-lg p-6 flex flex-col" style="transition-delay: 100ms">
                         <h3 class="text-xl font-bold text-white mb-2">C++ Neural Networks</h3>
                         <p class="text-gray-400 mb-4 text-sm flex-grow">A neural network framework in C++ with GPU parallelization using CUDA, achieving 83.6% accuracy on CIFAR-10.</p>
-                        <div class="flex flex-wrap gap-2 my-4"><span class="tech-tag">C++</span><span class="tech-tag">CUDA</span><span class="tech-tag">GPU</span></div>
-                        <div class="mt-auto"><a href="https://github.com/aahlaadmantravadi/nn_with_cpp" class="link-style" rel="noopener noreferrer" target="_blank"><i data-lucide="github" class="w-4 h-4 mr-2" aria-hidden="true"></i>Source Code</a></div>
+                        <div class="flex flex-wrap gap-2 my-4">
+                            <span class="inline-flex items-center bg-indigo-500/10 text-indigo-300 text-xs font-semibold px-3 py-1 rounded-full border border-indigo-500/20 transition-all duration-300 hover:bg-indigo-500/20">C++</span>
+                            <span class="inline-flex items-center bg-indigo-500/10 text-indigo-300 text-xs font-semibold px-3 py-1 rounded-full border border-indigo-500/20 transition-all duration-300 hover:bg-indigo-500/20">CUDA</span>
+                            <span class="inline-flex items-center bg-indigo-500/10 text-indigo-300 text-xs font-semibold px-3 py-1 rounded-full border border-indigo-500/20 transition-all duration-300 hover:bg-indigo-500/20">GPU</span>
+                        </div>
+                        <div class="flex justify-between items-center mt-4">
+                           <a href="https://github.com/aahlaadmantravadi/nn_with_cpp" target="_blank" class="link-style hoverable"><i data-lucide="github" class="w-4 h-4 mr-2"></i>Source Code</a>
+                           <button class="mt-auto text-sm bg-indigo-500/10 text-indigo-300 font-semibold px-4 py-2 rounded-full border border-indigo-500/20 transition-all duration-300 hover:bg-indigo-500/20 hover:text-white flex items-center justify-center gap-2 hoverable elaborate-btn">✨ Elaborate with AI</button>
+                        </div>
                     </div>
-
-                    <div class="spotlight-card p-6 flex flex-col reveal" tabindex="0" style="transition-delay:200ms">
+                    <div class="spotlight-card rounded-lg p-6 flex flex-col" style="transition-delay: 200ms">
+                        <h3 class="text-xl font-bold text-white mb-2">Linux Debugger</h3>
+                        <p class="text-gray-400 mb-4 text-sm flex-grow">A lightweight debugger in C++ using ptrace for process control, with ELF/DWARF parsers for source-level debugging.</p>
+                        <div class="flex flex-wrap gap-2 my-4">
+                            <span class="inline-flex items-center bg-indigo-500/10 text-indigo-300 text-xs font-semibold px-3 py-1 rounded-full border border-indigo-500/20 transition-all duration-300 hover:bg-indigo-500/20">C++</span>
+                            <span class="inline-flex items-center bg-indigo-500/10 text-indigo-300 text-xs font-semibold px-3 py-1 rounded-full border border-indigo-500/20 transition-all duration-300 hover:bg-indigo-500/20">Linux</span>
+                            <span class="inline-flex items-center bg-indigo-500/10 text-indigo-300 text-xs font-semibold px-3 py-1 rounded-full border border-indigo-500/20 transition-all duration-300 hover:bg-indigo-500/20">ptrace</span>
+                        </div>
+                        <div class="flex justify-between items-center mt-4">
+                           <a href="https://github.com/aahlaadmantravadi/mini-debugger" target="_blank" class="link-style hoverable"><i data-lucide="github" class="w-4 h-4 mr-2"></i>Source Code</a>
+                           <button class="mt-auto text-sm bg-indigo-500/10 text-indigo-300 font-semibold px-4 py-2 rounded-full border border-indigo-500/20 transition-all duration-300 hover:bg-indigo-500/20 hover:text-white flex items-center justify-center gap-2 hoverable elaborate-btn">✨ Elaborate with AI</button>
+                        </div>
+                    </div>
+                    <div class="spotlight-card rounded-lg p-6 flex flex-col" style="transition-delay: 300ms">
                         <h3 class="text-xl font-bold text-white mb-2">Unified Messaging Gateway</h3>
                         <p class="text-gray-400 mb-4 text-sm flex-grow">A Node.js-based system featuring a TCP echo server, an HTTP server, and WebSocket communication for robust messaging.</p>
-                        <div class="flex flex-wrap gap-2 my-4"><span class="tech-tag">Node.js</span><span class="tech-tag">JavaScript</span><span class="tech-tag">TCP</span></div>
-                        <div class="mt-auto"><a href="https://github.com/aahlaadmantravadi/web-server" class="link-style" rel="noopener noreferrer" target="_blank"><i data-lucide="github" class="w-4 h-4 mr-2" aria-hidden="true"></i>Source Code</a></div>
+                        <div class="flex flex-wrap gap-2 my-4">
+                            <span class="inline-flex items-center bg-indigo-500/10 text-indigo-300 text-xs font-semibold px-3 py-1 rounded-full border border-indigo-500/20 transition-all duration-300 hover:bg-indigo-500/20">Node.js</span>
+                            <span class="inline-flex items-center bg-indigo-500/10 text-indigo-300 text-xs font-semibold px-3 py-1 rounded-full border border-indigo-500/20 transition-all duration-300 hover:bg-indigo-500/20">JavaScript</span>
+                            <span class="inline-flex items-center bg-indigo-500/10 text-indigo-300 text-xs font-semibold px-3 py-1 rounded-full border border-indigo-500/20 transition-all duration-300 hover:bg-indigo-500/20">TCP</span>
+                        </div>
+                        <div class="flex justify-between items-center mt-4">
+                           <a href="https://github.com/aahlaadmantravadi/web-server" class="link-style hoverable"><i data-lucide="github" class="w-4 h-4 mr-2"></i>Source Code</a>
+                           <button class="mt-auto text-sm bg-indigo-500/10 text-indigo-300 font-semibold px-4 py-2 rounded-full border border-indigo-500/20 transition-all duration-300 hover:bg-indigo-500/20 hover:text-white flex items-center justify-center gap-2 hoverable elaborate-btn">✨ Elaborate with AI</button>
+                        </div>
                     </div>
-
-                    <div class="spotlight-card p-6 flex flex-col reveal" tabindex="0" style="transition-delay:300ms">
-                        <h3 class="text-xl font-bold text-white mb-2">Simple Blockchain Prototype</h3>
+                    <div class="spotlight-card rounded-lg p-6 flex flex-col" style="transition-delay: 400ms">
+                        <h3 class="text-xl font-bold text-white mb-2">Blockchain Prototype</h3>
                         <p class="text-gray-400 mb-4 text-sm flex-grow">A functional blockchain in Python with a Proof-of-Work algorithm and a Flask-based REST API for node interaction.</p>
-                        <div class="flex flex-wrap gap-2 my-4"><span class="tech-tag">Python</span><span class="tech-tag">Flask</span><span class="tech-tag">REST API</span></div>
-                        <div class="mt-auto"><a href="https://github.com/aahlaadmantravadi/blockchain_prototype/" class="link-style" rel="noopener noreferrer" target="_blank"><i data-lucide="github" class="w-4 h-4 mr-2" aria-hidden="true"></i>Source Code</a></div>
+                        <div class="flex flex-wrap gap-2 my-4">
+                            <span class="inline-flex items-center bg-indigo-500/10 text-indigo-300 text-xs font-semibold px-3 py-1 rounded-full border border-indigo-500/20 transition-all duration-300 hover:bg-indigo-500/20">Python</span>
+                            <span class="inline-flex items-center bg-indigo-500/10 text-indigo-300 text-xs font-semibold px-3 py-1 rounded-full border border-indigo-500/20 transition-all duration-300 hover:bg-indigo-500/20">Flask</span>
+                            <span class="inline-flex items-center bg-indigo-500/10 text-indigo-300 text-xs font-semibold px-3 py-1 rounded-full border border-indigo-500/20 transition-all duration-300 hover:bg-indigo-500/20">REST API</span>
+                        </div>
+                        <div class="flex justify-between items-center mt-4">
+                           <a href="https://github.com/aahlaadmantravadi/blockchain_prototype/" target="_blank" class="link-style hoverable"><i data-lucide="github" class="w-4 h-4 mr-2"></i>Source Code</a>
+                           <button class="mt-auto text-sm bg-indigo-500/10 text-indigo-300 font-semibold px-4 py-2 rounded-full border border-indigo-500/20 transition-all duration-300 hover:bg-indigo-500/20 hover:text-white flex items-center justify-center gap-2 hoverable elaborate-btn">✨ Elaborate with AI</button>
+                        </div>
+                    </div>
+                    <!-- New "More Projects" Card -->
+                    <div class="rounded-lg p-6 flex flex-col items-center justify-center text-center border-2 border-dashed border-indigo-500/30 hover:border-indigo-500/50 hover:bg-indigo-500/5 transition-all duration-300">
+                        <h3 class="text-xl font-bold text-white mb-2">Explore More</h3>
+                        <p class="text-gray-400 mb-4 text-sm flex-grow">Check out my complete collection of projects, experiments, and open-source contributions.</p>
+                        <a href="https://github.com/aahlaadmantravadi" target="_blank" class="btn btn-primary hoverable mt-auto">
+                            <div class="flex items-center">
+                               <i data-lucide="github" class="w-4 h-4 mr-2"></i>
+                               <span>View on GitHub</span>
+                            </div>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -243,59 +377,112 @@
 
         <!-- Skills Section -->
         <section id="skills" class="py-20 md:py-32 bg-black/20">
-            <div class="container mx-auto px-6 reveal">
+            <div class="container mx-auto px-6">
+                <div class="section-heading reveal">
+                    <span class="section-number">04</span>
+                    <h2 class="section-title">Skills & Toolkit</h2>
+                </div>
+                <!-- Core Competencies -->
                 <div class="mb-24">
-                    <h2 class="section-title gradient">Technical Skills</h2>
-                    <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
-                        <div class="skill-category"><h4>Languages</h4><ul><li>C++</li><li>Python</li><li>JavaScript</li></ul></div>
-                        <div class="skill-category"><h4>DevOps</h4><ul><li>Linux / Windows</li><li>Git & Docker</li><li>SQL & NoSQL</li><li>Make</li></ul></div>
-                        <div class="skill-category"><h4>Frameworks</h4><ul><li>Node.js</li><li>Tensorflow</li><li>Windows API</li></ul></div>
-                        <div class="skill-category"><h4>Technologies</h4><ul><li>CUDA</li><li>REST API</li><li>MySQL</li></ul></div>
+                    <h3 class="text-2xl font-bold text-indigo-300 mb-8 text-center">Core Competencies</h3>
+                    <div class="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+                        <div class="bg-gray-500/5 p-6 rounded-lg border border-gray-500/10 transition-all duration-300 hover:border-indigo-500/30 hover:-translate-y-2">
+                            <i data-lucide="terminal-square" class="w-12 h-12 mx-auto mb-4 text-indigo-400"></i>
+                            <h3 class="text-lg font-bold text-white mb-2">Systems & C++</h3>
+                            <p class="text-gray-400">C++ system programming, memory management, low-level debugging, and robust, idiomatic implementations.</p>
+                        </div>
+                        <div class="bg-gray-500/5 p-6 rounded-lg border border-gray-500/10 transition-all duration-300 hover:border-indigo-500/30 hover:-translate-y-2">
+                            <i data-lucide="brain-circuit" class="w-12 h-12 mx-auto mb-4 text-indigo-400"></i>
+                            <h3 class="text-lg font-bold text-white mb-2">Applied AI</h3>
+                            <p class="text-gray-400">Model implementation and engineering—translating methods into working code and reliable pipelines.</p>
+                        </div>
+                        <div class="bg-gray-500/5 p-6 rounded-lg border border-gray-500/10 transition-all duration-300 hover:border-indigo-500/30 hover:-translate-y-2">
+                            <i data-lucide="bar-chart-4" class="w-12 h-12 mx-auto mb-4 text-indigo-400"></i>
+                            <h3 class="text-lg font-bold text-white mb-2">Quantitative Aptitude</h3>
+                            <p class="text-gray-400">Algorithms & data structures, probability & statistics, and practical problem-solving under constraints.</p>
+                        </div>
                     </div>
                 </div>
 
+                <!-- Technical Skills -->
                 <div class="mb-24">
-                    <h2 class="section-title gradient">Soft Skills</h2>
-                    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 max-w-4xl mx-auto">
-                        <div class="soft-skill-card">Leadership</div>
-                        <div class="soft-skill-card">Problem-Solving</div>
-                        <div class="soft-skill-card">Team Collaboration</div>
-                        <div class="soft-skill-card">Adaptability</div>
-                        <div class="soft-skill-card">Communication</div>
+                     <h3 class="text-2xl font-bold text-indigo-300 mb-8 text-center">Technical Toolkit</h3>
+                    <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                        <div class="bg-gray-900/50 p-6 rounded-lg border border-gray-500/10 transition-all duration-300 hover:border-indigo-500/30 hover:-translate-y-2">
+                            <h4 class="flex items-center text-lg font-bold text-indigo-300 mb-4 border-b border-indigo-500/30 pb-3"><i data-lucide="code-2" class="w-5 h-5 mr-3"></i>Languages</h4>
+                            <div class="flex flex-wrap gap-3 mt-4">
+                                <span class="inline-block bg-indigo-500/10 text-indigo-300 text-sm font-medium px-4 py-2 rounded-full transition-all duration-300 hover:bg-indigo-500/20 hover:text-white cursor-pointer">C/C++</span>
+                                <span class="inline-block bg-indigo-500/10 text-indigo-300 text-sm font-medium px-4 py-2 rounded-full transition-all duration-300 hover:bg-indigo-500/20 hover:text-white cursor-pointer">Python</span>
+                                <span class="inline-block bg-indigo-500/10 text-indigo-300 text-sm font-medium px-4 py-2 rounded-full transition-all duration-300 hover:bg-indigo-500/20 hover:text-white cursor-pointer">SQL</span>
+                            </div>
+                        </div>
+                        <div class="bg-gray-900/50 p-6 rounded-lg border border-gray-500/10 transition-all duration-300 hover:border-indigo-500/30 hover:-translate-y-2">
+                            <h4 class="flex items-center text-lg font-bold text-indigo-300 mb-4 border-b border-indigo-500/30 pb-3"><i data-lucide="cloud" class="w-5 h-5 mr-3"></i>Cloud</h4>
+                             <div class="flex flex-wrap gap-3 mt-4">
+                                <span class="inline-block bg-indigo-500/10 text-indigo-300 text-sm font-medium px-4 py-2 rounded-full transition-all duration-300 hover:bg-indigo-500/20 hover:text-white cursor-pointer">AWS</span>
+                                <span class="inline-block bg-indigo-500/10 text-indigo-300 text-sm font-medium px-4 py-2 rounded-full transition-all duration-300 hover:bg-indigo-500/20 hover:text-white cursor-pointer">Azure</span>
+                                <span class="inline-block bg-indigo-500/10 text-indigo-300 text-sm font-medium px-4 py-2 rounded-full transition-all duration-300 hover:bg-indigo-500/20 hover:text-white cursor-pointer">GCP</span>
+                            </div>
+                        </div>
+                        <div class="bg-gray-900/50 p-6 rounded-lg border border-gray-500/10 transition-all duration-300 hover:border-indigo-500/30 hover:-translate-y-2">
+                            <h4 class="flex items-center text-lg font-bold text-indigo-300 mb-4 border-b border-indigo-500/30 pb-3"><i data-lucide="server" class="w-5 h-5 mr-3"></i>DevOps</h4>
+                             <div class="flex flex-wrap gap-3 mt-4">
+                                <span class="inline-block bg-indigo-500/10 text-indigo-300 text-sm font-medium px-4 py-2 rounded-full transition-all duration-300 hover:bg-indigo-500/20 hover:text-white cursor-pointer">Git</span>
+                                <span class="inline-block bg-indigo-500/10 text-indigo-300 text-sm font-medium px-4 py-2 rounded-full transition-all duration-300 hover:bg-indigo-500/20 hover:text-white cursor-pointer">Docker</span>
+                                <span class="inline-block bg-indigo-500/10 text-indigo-300 text-sm font-medium px-4 py-2 rounded-full transition-all duration-300 hover:bg-indigo-500/20 hover:text-white cursor-pointer">Linux</span>
+                                <span class="inline-block bg-indigo-500/10 text-indigo-300 text-sm font-medium px-4 py-2 rounded-full transition-all duration-300 hover:bg-indigo-500/20 hover:text-white cursor-pointer">Windows</span>
+                            </div>
+                        </div>
+                        <div class="bg-gray-900/50 p-6 rounded-lg border border-gray-500/10 transition-all duration-300 hover:border-indigo-500/30 hover:-translate-y-2">
+                            <h4 class="flex items-center text-lg font-bold text-indigo-300 mb-4 border-b border-indigo-500/30 pb-3"><i data-lucide="atom" class="w-5 h-5 mr-3"></i>Frameworks & Tools</h4>
+                             <div class="flex flex-wrap gap-3 mt-4">
+                                <span class="inline-block bg-indigo-500/10 text-indigo-300 text-sm font-medium px-4 py-2 rounded-full transition-all duration-300 hover:bg-indigo-500/20 hover:text-white cursor-pointer">CUDA</span>
+                                <span class="inline-block bg-indigo-500/10 text-indigo-300 text-sm font-medium px-4 py-2 rounded-full transition-all duration-300 hover:bg-indigo-500/20 hover:text-white cursor-pointer">Win32 API</span>
+                                <span class="inline-block bg-indigo-500/10 text-indigo-300 text-sm font-medium px-4 py-2 rounded-full transition-all duration-300 hover:bg-indigo-500/20 hover:text-white cursor-pointer">TensorFlow</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
+                <!-- Soft Skills -->
+                <div class="mb-24">
+                    <h3 class="text-2xl font-bold text-indigo-300 mb-8 text-center">Professional Attributes</h3>
+                    <div class="flex flex-wrap justify-center gap-4 max-w-5xl mx-auto">
+                        <div class="flex items-center bg-gray-800/60 text-gray-300 text-base font-medium px-5 py-3 rounded-full border border-gray-700 transition-all duration-300 hover:border-indigo-500/50 hover:bg-indigo-500/10 hover:-translate-y-1 cursor-pointer"><i data-lucide="shield" class="w-5 h-5 mr-3 text-indigo-400"></i>Leadership</div>
+                        <div class="flex items-center bg-gray-800/60 text-gray-300 text-base font-medium px-5 py-3 rounded-full border border-gray-700 transition-all duration-300 hover:border-indigo-500/50 hover:bg-indigo-500/10 hover:-translate-y-1 cursor-pointer"><i data-lucide="lightbulb" class="w-5 h-5 mr-3 text-indigo-400"></i>Problem-Solving</div>
+                        <div class="flex items-center bg-gray-800/60 text-gray-300 text-base font-medium px-5 py-3 rounded-full border border-gray-700 transition-all duration-300 hover:border-indigo-500/50 hover:bg-indigo-500/10 hover:-translate-y-1 cursor-pointer"><i data-lucide="users" class="w-5 h-5 mr-3 text-indigo-400"></i>Team Collaboration</div>
+                        <div class="flex items-center bg-gray-800/60 text-gray-300 text-base font-medium px-5 py-3 rounded-full border border-gray-700 transition-all duration-300 hover:border-indigo-500/50 hover:bg-indigo-500/10 hover:-translate-y-1 cursor-pointer"><i data-lucide="git-fork" class="w-5 h-5 mr-3 text-indigo-400"></i>Adaptability</div>
+                        <div class="flex items-center bg-gray-800/60 text-gray-300 text-base font-medium px-5 py-3 rounded-full border border-gray-700 transition-all duration-300 hover:border-indigo-500/50 hover:bg-indigo-500/10 hover:-translate-y-1 cursor-pointer"><i data-lucide="message-circle" class="w-5 h-5 mr-3 text-indigo-400"></i>Communication</div>
+                    </div>
+                </div>
+
+                <!-- Languages -->
                 <div>
-                    <h2 class="section-title gradient">Language Proficiency</h2>
+                     <h3 class="text-2xl font-bold text-indigo-300 mb-8 text-center">Language Proficiency</h3>
                     <div class="space-y-6 max-w-4xl mx-auto">
                         <div class="lang-bar">
                             <div class="flex justify-between mb-1"><span class="text-base font-medium text-indigo-300">English</span><span class="text-sm font-medium text-indigo-300">Fluent</span></div>
-                            <div class="w-full bg-gray-700 rounded-full h-2.5"><div class="fill" data-width="100%" style="width:0%"></div></div>
+                            <div class="w-full bg-gray-700 rounded-full h-2.5"><div class="bg-indigo-500 h-2.5 rounded-full" style="width: 0%" data-width="100%"></div></div>
                         </div>
-
                         <div class="lang-bar">
                             <div class="flex justify-between mb-1"><span class="text-base font-medium text-indigo-300">Telugu</span><span class="text-sm font-medium text-indigo-300">Native</span></div>
-                            <div class="w-full bg-gray-700 rounded-full h-2.5"><div class="fill" data-width="100%" style="width:0%"></div></div>
+                            <div class="w-full bg-gray-700 rounded-full h-2.5"><div class="bg-indigo-500 h-2.5 rounded-full" style="width: 0%" data-width="100%"></div></div>
                         </div>
-
-                        <div class="lang-bar">
+                         <div class="lang-bar">
                             <div class="flex justify-between mb-1"><span class="text-base font-medium text-indigo-300">Hindi</span><span class="text-sm font-medium text-indigo-300">Professional</span></div>
-                            <div class="w-full bg-gray-700 rounded-full h-2.5"><div class="fill" data-width="85%" style="width:0%"></div></div>
+                            <div class="w-full bg-gray-700 rounded-full h-2.5"><div class="bg-indigo-500 h-2.5 rounded-full" style="width: 0%" data-width="85%"></div></div>
                         </div>
-
-                        <div class="lang-bar">
+                         <div class="lang-bar">
                             <div class="flex justify-between mb-1"><span class="text-base font-medium text-indigo-300">Japanese</span><span class="text-sm font-medium text-indigo-300">A2</span></div>
-                            <div class="w-full bg-gray-700 rounded-full h-2.5"><div class="fill" data-width="30%" style="width:0%"></div></div>
+                            <div class="w-full bg-gray-700 rounded-full h-2.5"><div class="bg-indigo-500 h-2.5 rounded-full" style="width: 0%" data-width="30%"></div></div>
                         </div>
-
-                        <div class="lang-bar">
+                         <div class="lang-bar">
                             <div class="flex justify-between mb-1"><span class="text-base font-medium text-indigo-300">German</span><span class="text-sm font-medium text-indigo-300">A2</span></div>
-                            <div class="w-full bg-gray-700 rounded-full h-2.5"><div class="fill" data-width="30%" style="width:0%"></div></div>
+                            <div class="w-full bg-gray-700 rounded-full h-2.5"><div class="bg-indigo-500 h-2.5 rounded-full" style="width: 0%" data-width="30%"></div></div>
                         </div>
-
-                        <div class="lang-bar">
+                         <div class="lang-bar">
                             <div class="flex justify-between mb-1"><span class="text-base font-medium text-indigo-300">Norwegian</span><span class="text-sm font-medium text-indigo-300">A2</span></div>
-                            <div class="w-full bg-gray-700 rounded-full h-2.5"><div class="fill" data-width="30%" style="width:0%"></div></div>
+                            <div class="w-full bg-gray-700 rounded-full h-2.5"><div class="bg-indigo-500 h-2.5 rounded-full" style="width: 0%" data-width="30%"></div></div>
                         </div>
                     </div>
                 </div>
@@ -303,175 +490,355 @@
         </section>
 
         <!-- Contact Section -->
-        <section id="contact" class="py-20 md:py-32">
-            <div class="container mx-auto px-6 text-center reveal">
-                <h2 class="section-title gradient">Let's Build Something Amazing</h2>
-                <div class="max-w-2xl mx-auto">
-                    <p class="text-lg mb-8 text-gray-300">I'm actively looking for new roles and opportunities. If you have a project in mind, a role to fill, or just want to connect, my inbox is always open.</p>
-                    <a href="mailto:aahlaad.mantravadi@gmail.com" class="btn btn-primary text-lg px-10 py-4 magnetic-button">Say Hello!</a>
-                    <div class="flex justify-center space-x-8 mt-16">
-                        <a href="https://linkedin.com/in/aahlaad" target="_blank" rel="noopener noreferrer" class="link-style" aria-label="LinkedIn"><i data-lucide="linkedin" class="w-8 h-8" aria-hidden="true"></i></a>
-                        <a href="mailto:aahlaad.mantravadi@gmail.com" class="link-style" aria-label="Email"><i data-lucide="mail" class="w-8 h-8" aria-hidden="true"></i></a>
+        <section id="contact" class="p-0">
+            <div id="contact-invitation" class="container mx-auto px-6 reveal">
+                <h2 class="contact-title text-center">
+                    <span class="contact-title-stroke hoverable">Let's Build</span><br>
+                    <span class="contact-title-stroke hoverable">The Future</span>
+                </h2>
+                
+                <div class="w-full max-w-2xl mx-auto my-12 text-center">
+                    <p class="text-gray-300 mb-6 text-lg">Have a concept? Let's brainstorm a project idea.</p>
+                    <div class="relative w-full max-w-lg mx-auto">
+                        <input type="text" id="idea-input" class="idea-input" placeholder="e.g., AI for real-time systems...">
+                        <button id="generate-idea-btn" class="absolute top-1/2 right-2.5 -translate-y-1/2 btn btn-primary hoverable text-sm !py-2 !px-4 disabled:opacity-50 disabled:cursor-not-allowed">
+                            <span class="btn-text">✨ Generate Idea</span>
+                            <span class="btn-loader hidden"><div class="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div></span>
+                        </button>
+                    </div>
+                    <div id="idea-output" class="hidden">
+                        <!-- AI Generated content will go here -->
+                    </div>
+                </div>
+
+                <div class="text-center mt-12">
+                    <p class="text-lg text-indigo-300 mb-4">Available for new projects</p>
+                    <a href="mailto:aahlaad.mantravadi@gmail.com" class="text-2xl font-semibold text-white hover:text-indigo-400 transition-colors duration-300 hoverable">
+                        aahlaad.mantravadi@gmail.com
+                    </a>
+                    <div class="flex justify-center space-x-8 mt-8">
+                        <a href="https://linkedin.com/in/aahlaad" target="_blank" class="link-style text-gray-400 hover:text-indigo-400 hoverable"><i data-lucide="linkedin" class="w-8 h-8"></i></a>
+                        <a href="https://github.com/aahlaadmantravadi" target="_blank" class="link-style text-gray-400 hover:text-indigo-400 hoverable"><i data-lucide="github" class="w-8 h-8"></i></a>
+                        <a href="mailto:aahlaad.mantravadi@gmail.com" class="link-style text-gray-400 hover:text-indigo-400 hoverable"><i data-lucide="mail" class="w-8 h-8"></i></a>
                     </div>
                 </div>
             </div>
         </section>
     </main>
 
-    <footer class="bg-transparent">
-        <div class="container mx-auto px-6 py-6 text-center text-gray-500">
-            <p>&copy; <span id="year">2025</span> Aahlaad Mantravadi. Designed &amp; Built with passion.</p>
+    <footer class="bg-transparent"><div class="container mx-auto px-6 py-6 text-center text-gray-500"><p>&copy; 2025 Aahlaad Mantravadi. Architected with C++ and caffeine.</p></div></footer>
+
+    <!-- AI Modal -->
+    <div id="ai-modal" class="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-[10001] transition-opacity duration-300 opacity-0 pointer-events-none">
+        <div id="ai-modal-box" class="bg-gray-900 border border-indigo-500/20 rounded-lg shadow-2xl shadow-indigo-500/10 p-8 max-w-2xl w-full mx-4 transform transition-all duration-300 scale-95">
+            <button id="ai-modal-close-btn" class="absolute top-4 right-4 text-gray-500 hover:text-white transition-colors hoverable">
+                <i data-lucide="x"></i>
+            </button>
+            <div class="text-2xl font-bold text-white mb-4 flex items-center">
+                <i data-lucide="brain-circuit" class="w-6 h-6 mr-3 text-indigo-400"></i>
+                <span id="ai-modal-title">AI Elaboration</span>
+            </div>
+            <div id="ai-modal-content" class="text-gray-300 leading-relaxed mt-4">
+                <div class="flex justify-center items-center h-32"><div class="loader"></div></div>
+            </div>
         </div>
-    </footer>
+    </div>
 
     <script>
-        // Accessibility-first initialization
-        document.documentElement.lang = 'en';
+        // --- LUCIDE ICONS ---
+        lucide.createIcons();
 
-        // Only enable custom cursor for pointer devices and when user does not prefer reduced motion
-        if (window.matchMedia && window.matchMedia('(pointer:fine)').matches && !window.matchMedia('(prefers-reduced-motion:reduce)').matches) {
-            document.body.classList.add('custom-cursor');
+        // --- GEMINI API CALLER (UPDATED FOR RENDER PROXY) ---
+        async function callGemini(prompt, retries = 3, delay = 1000) {
+            const proxyUrl = "https://render-proxy-api-server-service.onrender.com/generate";
+
+            try {
+                const response = await fetch(proxyUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ prompt: prompt })
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    console.error("Error from proxy/Google API:", errorData);
+                    throw new Error(`API request failed with status ${response.status}`);
+                }
+
+                const result = await response.json();
+                
+                if (result.candidates && result.candidates.length > 0 &&
+                    result.candidates[0].content && result.candidates[0].content.parts &&
+                    result.candidates[0].content.parts.length > 0) {
+                    return result.candidates[0].content.parts[0].text;
+                } else {
+                    console.error("Invalid response structure from API:", result);
+                    return "Sorry, I couldn't generate a valid response.";
+                }
+            } catch (error) {
+                console.error("Error calling the proxy server:", error);
+                if (retries > 0 && !(error instanceof SyntaxError)) {
+                    await new Promise(resolve => setTimeout(resolve, delay));
+                    return callGemini(prompt, retries - 1, delay * 2);
+                }
+                if (error instanceof SyntaxError) {
+                    return "Received an invalid response from the server. Please check the server logs.";
+                }
+                return "An error occurred while contacting the AI. Please try again later.";
+            }
         }
 
-        // Lucide icons (deferred script will register them when available)
-        document.addEventListener('DOMContentLoaded', () => {
-            if (window.lucide) lucide.createIcons();
+        // --- AI MODAL LOGIC (REVISED) ---
+        const aiModal = document.getElementById('ai-modal');
+        const aiModalBox = document.getElementById('ai-modal-box');
+        const aiModalContent = document.getElementById('ai-modal-content');
+        const aiModalTitle = document.getElementById('ai-modal-title');
+        const closeModalBtn = document.getElementById('ai-modal-close-btn');
 
-            // Mobile menu accessibility
-            const mobileMenuButton = document.getElementById('mobile-menu-button');
-            const mobileMenu = document.getElementById('mobile-menu');
-            mobileMenuButton.addEventListener('click', () => {
-                const expanded = mobileMenuButton.getAttribute('aria-expanded') === 'true';
-                mobileMenuButton.setAttribute('aria-expanded', String(!expanded));
-                mobileMenu.classList.toggle('hidden');
-                mobileMenu.setAttribute('aria-hidden', String(expanded));
+        function showModal() {
+            aiModal.classList.remove('opacity-0', 'pointer-events-none');
+            aiModalBox.classList.remove('scale-95');
+        }
+
+        function hideModal() {
+            aiModal.classList.add('opacity-0');
+            aiModalBox.classList.add('scale-95');
+            setTimeout(() => {
+                aiModal.classList.add('pointer-events-none');
+            }, 300);
+        }
+
+        closeModalBtn.addEventListener('click', hideModal);
+        aiModal.addEventListener('click', (e) => {
+            if (e.target === aiModal) {
+                hideModal();
+            }
+        });
+
+        document.querySelectorAll('.elaborate-btn').forEach(button => {
+            button.addEventListener('click', async (e) => {
+                const card = e.target.closest('.spotlight-card');
+                const title = card.querySelector('h3').innerText;
+                const description = card.querySelector('p').innerText;
+                const tags = Array.from(card.querySelectorAll('.tech-tag span')).map(tag => tag.innerText).join(', ');
+
+                aiModalTitle.innerText = `AI Elaboration: ${title}`;
+                aiModalContent.innerHTML = '<div class="flex justify-center items-center h-32"><div class="loader"></div></div>';
+                showModal();
+
+                const prompt = `You are a senior AI & Systems Architect. A potential recruiter is viewing a portfolio. Elaborate on the project titled '${title}'. The project is described as: '${description}'. The technologies used were: '${tags}'. Provide a more in-depth technical explanation, highlighting the challenges, the solutions implemented, and the overall impact of the project. Keep it concise, professional, and engaging, around 3-4 rich sentences. Format the response using simple HTML paragraphs (<p>).`;
+                
+                const response = await callGemini(prompt);
+                aiModalContent.innerHTML = response;
             });
+        });
 
-            mobileMenu.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape') { mobileMenu.classList.add('hidden'); mobileMenuButton.setAttribute('aria-expanded','false'); mobileMenu.setAttribute('aria-hidden','true'); mobileMenuButton.focus(); }
-            });
+        // --- IDEA GENERATION LOGIC ---
+        const generateIdeaBtn = document.getElementById('generate-idea-btn');
+        const ideaInput = document.getElementById('idea-input');
+        const ideaOutput = document.getElementById('idea-output');
 
-            // Close mobile menu when a link is clicked
-            mobileMenu.addEventListener('click', (e) => { if (e.target.tagName === 'A') { mobileMenu.classList.add('hidden'); mobileMenuButton.setAttribute('aria-expanded','false'); mobileMenu.setAttribute('aria-hidden','true'); } });
-
-            // Focus ring improvements for keyboard users
-            (function keyboardFocusToggle(){
-                function handleFirstTab(e){ if (e.key === 'Tab') { document.body.classList.add('user-is-tabbing'); window.removeEventListener('keydown', handleFirstTab); }}
-                window.addEventListener('keydown', handleFirstTab);
-            })();
-
-            // Reveal on scroll with IntersectionObserver
-            const revealObserver = new IntersectionObserver((entries, observer) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('visible');
-
-                        // language bars animation
-                        const bars = entry.target.querySelectorAll && entry.target.querySelectorAll('.fill');
-                        if (bars && bars.length) {
-                            bars.forEach(b => { b.style.width = b.dataset.width || b.getAttribute('data-width') || '100%'; });
-                        }
-
-                        observer.unobserve(entry.target);
-                    }
-                });
-            }, { threshold: 0.12 });
-
-            document.querySelectorAll('.reveal, .lang-bar').forEach(el => revealObserver.observe(el));
-
-            // Magnetic buttons
-            document.querySelectorAll('.magnetic-button').forEach(button => {
-                button.addEventListener('mousemove', function(e){
-                    const rect = button.getBoundingClientRect();
-                    const x = e.clientX - rect.left - rect.width/2;
-                    const y = e.clientY - rect.top - rect.height/2;
-                    button.style.transform = `translate(${x*0.18}px, ${y*0.28}px)`;
-                });
-                button.addEventListener('mouseleave', function(){ button.style.transform = 'translate(0,0)'; });
-            });
-
-            // Spotlight cards pointer tracking
-            let activeSpotlightCard = null;
-            let mouseX = 0, mouseY = 0, cursorX = 0, cursorY = 0, currentScale = 1, isHovering = false;
-            const cursor = document.querySelector('.cursor');
-            const hoverables = document.querySelectorAll('a, button, .spotlight-card');
-
-            document.addEventListener('mousemove', e => { mouseX = e.clientX; mouseY = e.clientY; });
-
-            hoverables.forEach(el => {
-                el.addEventListener('mouseenter', () => isHovering = true);
-                el.addEventListener('mouseleave', () => isHovering = false);
-            });
-
-            document.querySelectorAll('.spotlight-card').forEach(card => {
-                card.addEventListener('mouseenter', () => activeSpotlightCard = card);
-                card.addEventListener('mouseleave', () => activeSpotlightCard = null);
-            });
-
-            function unifiedAnimator(){
-                // cursor lerp
-                cursorX += (mouseX - cursorX) * 0.18; cursorY += (mouseY - cursorY) * 0.18;
-                const targetScale = isHovering ? 4.8 : 1;
-                currentScale += (targetScale - currentScale) * 0.22;
-                cursor.style.transform = `translate3d(${cursorX}px, ${cursorY}px,0) scale(${currentScale})`;
-
-                if (activeSpotlightCard){
-                    const rect = activeSpotlightCard.getBoundingClientRect();
-                    const x = cursorX - rect.left; const y = cursorY - rect.top;
-                    activeSpotlightCard.style.setProperty('--x', `${x}px`);
-                    activeSpotlightCard.style.setProperty('--y', `${y}px`);
+        const handleIdeaGeneration = async () => {
+            const userInput = ideaInput.value.trim();
+            if (!userInput || generateIdeaBtn.disabled) {
+                if(!userInput) {
+                    ideaOutput.innerHTML = '<p class="text-red-400">Please enter a concept to generate an idea.</p>';
+                    ideaOutput.classList.remove('hidden');
                 }
-                requestAnimationFrame(unifiedAnimator);
+                return;
             }
-            unifiedAnimator();
+            
+            generateIdeaBtn.querySelector('.btn-text').classList.add('hidden');
+            generateIdeaBtn.querySelector('.btn-loader').classList.remove('hidden');
+            generateIdeaBtn.disabled = true;
 
-            // Header style on scroll
-            const header = document.getElementById('header');
-            window.addEventListener('scroll', () => { header.classList.toggle('glass-nav', window.scrollY > 50); });
+            ideaOutput.innerHTML = '<div class="flex justify-center items-center p-8"><div class="loader"></div></div>';
+            ideaOutput.classList.remove('hidden');
+            
+            const prompt = `As an expert AI & Systems Architect, brainstorm a high-level project idea based on the concept: '${userInput}'.
+            Format the response in HTML. The response must be structured as follows:
+            1. A main title for the project idea inside an \`<h3 class="idea-title">\` tag.
+            2. A short, impactful tagline in a \`<p class="idea-tagline">\` tag.
+            3. A paragraph starting with \`<strong>Technical Approach:</strong>\` detailing the implementation.
+            4. A final paragraph starting with \`<strong>Impact:</strong>\` describing the project's value.
+            Make the language inspiring and frame it as an exciting potential collaboration. Do not wrap the entire response in a code block.`;
 
-            // Update year in footer
-            document.getElementById('year').textContent = new Date().getFullYear();
+            const response = await callGemini(prompt);
+            ideaOutput.innerHTML = response;
+            
+            generateIdeaBtn.querySelector('.btn-text').classList.remove('hidden');
+            generateIdeaBtn.querySelector('.btn-loader').classList.add('hidden');
+            generateIdeaBtn.disabled = false;
+        };
+
+        generateIdeaBtn.addEventListener('click', handleIdeaGeneration);
+        ideaInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                handleIdeaGeneration();
+            }
         });
 
-        // THREE.JS BACKGROUND - initialize after window load to avoid blocking LCP
-        window.addEventListener('load', () => {
-            if (!window.THREE) return; // degrade gracefully
 
-            let scene = new THREE.Scene();
-            let camera = new THREE.PerspectiveCamera(60, window.innerWidth/window.innerHeight, 1, 1000);
-            camera.position.z = 1; camera.rotation.x = Math.PI/2;
-            const canvas = document.getElementById('bg-canvas');
-            const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true });
-            renderer.setSize(window.innerWidth, window.innerHeight); renderer.setClearColor(0x000000,0);
+        // --- UNIFIED ANIMATION FRAME ---
+        const cursor = document.querySelector('.cursor');
+        const hoverables = document.querySelectorAll('.hoverable');
+        let mouseX = 0, mouseY = 0, cursorX = 0, cursorY = 0;
+        const speed = 0.2;
+        let activeSpotlightCard = null;
+        let isHovering = false;
+        let currentScale = 1;
+        const targetScale = 5;
 
-            function createStarTexture(){
-                const c = document.createElement('canvas'); c.width = 16; c.height = 16; const ctx = c.getContext('2d');
-                const g = ctx.createRadialGradient(8,8,0,8,8,8);
-                g.addColorStop(0,'rgba(255,255,255,1)'); g.addColorStop(0.2,'rgba(255,255,255,0.8)'); g.addColorStop(1,'rgba(255,255,255,0)');
-                ctx.fillStyle = g; ctx.fillRect(0,0,16,16);
-                return new THREE.CanvasTexture(c);
+        document.addEventListener('mousemove', e => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+
+        function unifiedAnimator() {
+            cursorX += (mouseX - cursorX) * speed;
+            cursorY += (mouseY - cursorY) * speed;
+            
+            const scaleSpeed = 0.2;
+            if (isHovering) {
+                currentScale += (targetScale - currentScale) * scaleSpeed;
+            } else {
+                currentScale += (1 - currentScale) * scaleSpeed;
+            }
+            
+            cursor.style.transform = `translate3d(${cursorX}px, ${cursorY}px, 0) scale(${currentScale})`;
+
+            if (activeSpotlightCard) {
+                const rect = activeSpotlightCard.getBoundingClientRect();
+                const x = cursorX - rect.left;
+                const y = cursorY - rect.top;
+                activeSpotlightCard.style.setProperty('--x', `${x}px`);
+                activeSpotlightCard.style.setProperty('--y', `${y}px`);
             }
 
+            requestAnimationFrame(unifiedAnimator);
+        }
+        unifiedAnimator();
+
+        hoverables.forEach(el => {
+            el.addEventListener('mouseenter', () => isHovering = true);
+            el.addEventListener('mouseleave', () => isHovering = false);
+        });
+        document.addEventListener('mouseleave', () => cursor.classList.add('hidden'));
+        document.addEventListener('mouseenter', () => cursor.classList.remove('hidden'));
+
+        // --- MAGNETIC BUTTONS ---
+        const magneticButtons = document.querySelectorAll('.magnetic-button');
+        magneticButtons.forEach(button => {
+            button.addEventListener('mousemove', function(e) {
+                const rect = button.getBoundingClientRect();
+                const x = e.clientX - rect.left - rect.width / 2;
+                const y = e.clientY - rect.top - rect.height / 2;
+                button.style.transform = `translate(${x * 0.2}px, ${y * 0.3}px)`;
+            });
+            button.addEventListener('mouseout', function() {
+                button.style.transform = 'translate(0,0)';
+            });
+        });
+
+        // --- SPOTLIGHT EFFECT ---
+        const spotlightCards = document.querySelectorAll('.spotlight-card');
+        spotlightCards.forEach(card => {
+            card.addEventListener('mouseenter', () => activeSpotlightCard = card);
+            card.addEventListener('mouseleave', () => activeSpotlightCard = null);
+        });
+
+        // --- MOBILE MENU ---
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        mobileMenuButton.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
+        mobileMenu.addEventListener('click', (e) => { if (e.target.tagName === 'A') mobileMenu.classList.add('hidden'); });
+
+        // --- HEADER STYLE ON SCROLL ---
+        const header = document.getElementById('header');
+        window.addEventListener('scroll', () => header.classList.toggle('glass-nav', window.scrollY > 50));
+        
+        // --- SCROLL REVEAL ANIMATIONS ---
+        const revealObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    
+                    if (entry.target.classList.contains('lang-bar')) {
+                        const bar = entry.target.querySelector('.bg-indigo-500');
+                        setTimeout(() => { bar.style.width = bar.dataset.width; }, 200);
+                    }
+                }
+            });
+        }, { threshold: 0.15 });
+
+        document.querySelectorAll('.reveal, .lang-bar').forEach(el => revealObserver.observe(el));
+
+        // --- THREE.JS ANIMATED BACKGROUND ---
+        let scene, camera, renderer, stars;
+
+        function createStarTexture() {
+            const canvas = document.createElement('canvas');
+            canvas.width = 16;
+            canvas.height = 16;
+            const context = canvas.getContext('2d');
+            const gradient = context.createRadialGradient(8, 8, 0, 8, 8, 8);
+            gradient.addColorStop(0, 'rgba(255,255,255,1)');
+            gradient.addColorStop(0.2, 'rgba(255,255,255,0.8)');
+            gradient.addColorStop(1, 'rgba(255,255,255,0)');
+            context.fillStyle = gradient;
+            context.fillRect(0, 0, 16, 16);
+            return new THREE.CanvasTexture(canvas);
+        }
+
+        function initThreeJS() {
+            scene = new THREE.Scene();
+            camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 1000);
+            camera.position.z = 1; camera.rotation.x = Math.PI / 2;
+            const canvas = document.getElementById("bg-canvas");
+            renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true });
+            renderer.setSize(window.innerWidth, window.innerHeight); renderer.setClearColor(0x000000, 0);
             const starGeo = new THREE.BufferGeometry();
-            const starCount = 5000; // reduced for performance
+            const starCount = 8000;
             const positions = new Float32Array(starCount * 3);
-            for (let i=0;i<starCount*3;i++) positions[i] = (Math.random()-0.5)*800;
-            starGeo.setAttribute('position', new THREE.BufferAttribute(positions,3));
-
-            const starMaterial = new THREE.PointsMaterial({ size:1.5, map: createStarTexture(), transparent:true, depthWrite:false, blending:THREE.AdditiveBlending });
-            const stars = new THREE.Points(starGeo, starMaterial);
-            scene.add(stars);
-
-            function onResize(){ camera.aspect = window.innerWidth/window.innerHeight; camera.updateProjectionMatrix(); renderer.setSize(window.innerWidth, window.innerHeight); }
-            window.addEventListener('resize', onResize, false);
-
-            document.addEventListener('mousemove', (event)=>{
-                const mouseX = (event.clientX/window.innerWidth)*2-1; const mouseY = -(event.clientY/window.innerHeight)*2+1;
-                stars.rotation.x = mouseY * 0.05; stars.rotation.y = mouseX * 0.05;
+            for (let i = 0; i < starCount * 3; i++) { positions[i] = (Math.random() - 0.5) * 800; }
+            starGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+            
+            let starMaterial = new THREE.PointsMaterial({ 
+                color: 0xaaaaaa,
+                size: 1.5, 
+                map: createStarTexture(),
+                transparent: true,
+                depthWrite: false,
+                blending: THREE.AdditiveBlending
             });
 
-            (function animate(){ requestAnimationFrame(animate); renderer.render(scene,camera); })();
-        });
+            stars = new THREE.Points(starGeo, starMaterial);
+            scene.add(stars);
+            window.addEventListener("resize", () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            }, false);
+            
+            document.addEventListener('mousemove', (event) => {
+                if (stars) {
+                    const mouseX = (event.clientX / window.innerWidth) * 2 - 1;
+                    const mouseY = -(event.clientY / window.innerHeight) * 2 + 1;
+                    stars.rotation.x = mouseY * 0.05;
+                    stars.rotation.y = mouseX * 0.05;
+                }
+            });
+
+            animateThree();
+        }
+        function animateThree() {
+            requestAnimationFrame(animateThree);
+            if (renderer && scene && camera) {
+                renderer.render(scene, camera);
+            }
+        }
+        initThreeJS();
     </script>
 </body>
 </html>
