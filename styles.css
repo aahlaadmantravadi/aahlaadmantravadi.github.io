@@ -1063,7 +1063,7 @@ body {
   height: var(--cursor-size);
   background-color: var(--primary-color);
   border-radius: 50%;
-  z-index: 10000;
+  z-index: 99999;
   pointer-events: none;
   mix-blend-mode: difference;
 }
