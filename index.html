@@ -206,7 +206,7 @@
                     Aahlaad Mantravadi
                 </h1>
                 <p class="text-xl md:text-2xl text-indigo-300 font-medium mb-12 animate-fade-in-up">
-                    High-performance C++ systems · Applied AI · Quantitative problem solving
+                    Systems Engineering · Applied AI · C++
                 </p>
 
                 <div class="flex justify-center space-x-4 animate-fade-in-up">
@@ -638,7 +638,7 @@
         const ideaInput = document.getElementById('idea-input');
         const ideaOutput = document.getElementById('idea-output');
 
-        const handleIdeaGeneration = async () => {
+                const handleIdeaGeneration = async () => {
             const userInput = ideaInput.value.trim();
             if (!userInput || generateIdeaBtn.disabled) {
                 if(!userInput) {
@@ -655,13 +655,22 @@
             ideaOutput.innerHTML = '<div class="flex justify-center items-center p-8"><div class="loader"></div></div>';
             ideaOutput.classList.remove('hidden');
             
-            const prompt = `As an expert AI & Systems Architect, brainstorm a high-level project idea based on the concept: '${userInput}'.
-            Format the response in HTML. The response must be structured as follows:
-            1. A main title for the project idea inside an \`<h3 class="idea-title">\` tag.
-            2. A short, impactful tagline in a \`<p class="idea-tagline">\` tag.
-            3. A paragraph starting with \`<strong>Technical Approach:</strong>\` detailing the implementation.
-            4. A final paragraph starting with \`<strong>Impact:</strong>\` describing the project's value.
-            Make the language inspiring and frame it as an exciting potential collaboration. Do not wrap the entire response in a code block.`;
+            // --- NEW AND IMPROVED PROMPT ---
+            const prompt = `You are 'ARTIST', an expert AI Systems Architect and a creative brainstorming partner. Your goal is to take a user's concept and flesh it out into an exciting, high-level project idea that feels like the start of a collaboration.
+
+            The user's concept is: '${userInput}'.
+
+            Generate a response in HTML, following this exact structure:
+
+            1.  **Project Title:** An engaging, professional title in an \`<h3>\` tag with the class "idea-title". Start the title with a ✨ emoji.
+            2.  **Core Concept:** A single, impactful sentence in a \`<p>\` tag with the class "idea-tagline", summarizing the idea.
+            3.  **The Blueprint:** A section with three distinct pillars. Each pillar should be a \`<p>\` tag with a \`<strong>\` tag for the heading. Use these exact headings and emojis:
+                *   \`<strong>🧠 The Core Engine:</strong>\` (Describe the main technical/AI component).
+                *   \`<strong>⚙️ The Technical Stack:</strong>\` (Suggest key technologies like C++, Python, CUDA, etc.).
+                *   \`<strong>🚀 The Impact:</strong>\` (Explain why this project matters).
+            4.  **Next Steps:** A final paragraph starting with \`<strong>Next Question:</strong>\`. Pose a thought-provoking question to the user to guide the next stage of thinking. This makes it feel interactive.
+
+            Keep the language concise, inspiring, and professional. Do not wrap the response in a markdown code block.`;
 
             const response = await callGemini(prompt);
             ideaOutput.innerHTML = response;
